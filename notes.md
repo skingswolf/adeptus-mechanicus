@@ -380,12 +380,31 @@ Packing, ciphers, base64/hex/rot encoding
 - The web page title PHP 7.4.3 - phpinfo() indicates that this is a PHPInfo file, which is often manually created to confirm that PHP has been successfully installed.
 
 - Use the -sC parameter to specify that Nmap scripts should be used to try and obtain more detailed information.
+  - This flag uses the default scripts, which are listed [here](https://nmap.org/nsedoc/categories/default.html).
 - The -sV parameter instructs Nmap to perform a version scan.
+  - Service scan.
   - The version scan is underpinned by a comprehensive database of over 1,000 service signatures
 - -p- tells Nmap that we want to scan all 65,535 TCP ports.
 - -Pn ignores waiting for a ping back from the host and just search for services anyway.
+- --open only returns open ports.
+- -oG - output the greppable format to stdout
+  - `nmap -v -oG -`
+- -oA outputs all scan formats.
+  - This includes XML output, greppable output, and text output that may be useful to us later. It is essential to get in the habit of taking extensive notes and saving all console output early on.
+- --script=http-enum
+  - [http-enum script](https://nmap.org/nsedoc/scripts/http-enum.html) can be used to enumerate common web application directories
 
 - `locate scripts/citrix` 
+  - List various available nmap scripts
+
+- `nmap -v -oG -`
+- `nmap -sV --open -oA nibbles_initial_scan <ip address>`
+  - nibbles_initial_scan is the name of the output file.
+
+- Ideas
+  - `nc -nv 10.129.42.190 80`
+  - `nmap -sC -p 22,80 -oA nibbles_script_scan 10.129.42.190`
+  - `nmap -sV --script=http-enum -oA nibbles_nmap_http_enum 10.129.42.190` 
 
 - We could use [this](https://raw.githubusercontent.com/cyberstruggle/DeltaGroup/master/CVE-2019-19781/CVE-2019-19781.nse) Nmap script to audit for the severe Citrix NetScaler vulnerability ([CVE-2019–19781](https://www.rapid7.com/blog/post/2020/01/17/active-exploitation-of-citrix-netscaler-cve-2019-19781-what-you-need-to-know/)), while Nmap also has other scripts to audit a Citrix installation.
 - `nmap --script <script name> -p<port> <host>`
