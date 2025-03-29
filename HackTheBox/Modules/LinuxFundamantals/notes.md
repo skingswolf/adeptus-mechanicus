@@ -1,6 +1,7 @@
 # Linux Fundamentals
 - [Linux Fundamentals](#linux-fundamentals)
-  - [TODO](#todo)
+  - [Key Concepts](#key-concepts)
+- [Linux Distributions](#linux-distributions)
   - [Philosophy](#philosophy)
   - [Components](#components)
   - [Linux Architecture](#linux-architecture)
@@ -8,21 +9,24 @@
   - [Getting Help](#getting-help)
   - [Shell](#shell)
   - [System Information](#system-information)
-  - [User Management](#user-management)
-  - [Package Management](#package-management)
-  - [Service and Process Management](#service-and-process-management)
-  - [Working with Web Services$$](#working-with-web-services)
   - [Navigation](#navigation)
   - [Working with Files and Directories](#working-with-files-and-directories)
   - [Editing Files](#editing-files)
   - [Find Files and Directories](#find-files-and-directories)
   - [File Descriptors and Redirections](#file-descriptors-and-redirections)
   - [Filter Contents](#filter-contents)
+  - [Regular Expressions](#regular-expressions)
+    - [Regex in Detail](#regex-in-detail)
+  - [User Management](#user-management)
+  - [Package Management](#package-management)
+  - [Service and Process Management](#service-and-process-management)
+  - [Working with Web Services](#working-with-web-services)
+  - [Exercises](#exercises)
   - [Other](#other)
 
 These are very basic notes. They've have been copied & pasted from HackTheBox's module for completeness
-
-## TODO
+3
+## Key Concepts
 
 - Kernel (v basic)
   - The kernel is a computer program at the core of a computer's operating system and generally has complete control over everything in the system. It is the portion of the operating system code that is always resident in memory and facilitates interactions between hardware and software components.
@@ -32,6 +36,31 @@ These are very basic notes. They've have been copied & pasted from HackTheBox's 
     - It provides the interfaces (for services) needed for users and applications to interact with the computer.
     - It launches and manages applications.
     - It manages the underlying system hardware devices.
+
+# Linux Distributions
+
+- Linux distributions - or distros - are operating systems based on the Linux kernel. They are used for various purposes, from servers and embedded devices to desktop computers and mobile phones. Each Linux distribution is different, with its own set of features, packages, and tools.
+- Linux is open source, meaning its source code is available for scrutiny and customization.
+- We look for security, stability, reliability and frequent updates in a Linux distribution.
+- Popular because it's free, open source, and highly customizable.
+- Popular distributions:
+  - Ubuntu, Fedora, CentOS, Debian, Red Hat Enterprise Linux
+- Popular distributions for cybersecurity:
+  - ParrotOS, Ubuntu, Debian, Raspberry Pi OS, CentOS, BackBox, BlackArch,	Pentoo
+- The main differences between the various Linux distributions are the included packages, the user interface, and the tools available. 
+  - Kali Linux is the most popular distribution for cyber security specialists, including a wide range of security-focused tools and packages. 
+  - Ubuntu is widespread for desktop users.
+  - Debian is popular for servers and embedded systems.
+  - Red Hat Enterprise Linux and CentOS are popular for enterprise-level computing.
+- Debian
+  - Known for its stability and reliability.
+  - Used for desktop computing, servers, and embedded system.
+  - Uses an Advanced Package Tool (apt) package management system to handle software updates and security patches. The package management system helps keep the system up-to-date and secure by automatically downloading and installing security updates as soon as they are available. This can be executed manually or set up automatically.
+  - Debian can have a steeper learning curve than other distributions, but it is widely regarded as one of the most flexible and customizable Linux distros. The configuration and setup can be complex, but it also provides excellent control over the system, which can be good for advanced users. 
+  - Stability and reliability are key strengths of Debian. The distribution is known for its long-term support releases, which can provide updates and security patches for up to five years. This can be especially important for servers and other systems that must be up and running 24/7. It has had some vulnerabilities, but the development community has quickly released patches and security updates. In addition, Debian has a strong commitment to security and privacy, and the distribution has a well-established security track record. Debian is a versatile and reliable Linux distribution that is widely used for a range of purposes. Its stability, reliability, and commitment to security make it an attractive choice for various use cases, including cyber security.
+
+
+
 
 ## Philosophy
 - Everything is a file
@@ -116,7 +145,7 @@ These are very basic notes. They've have been copied & pasted from HackTheBox's 
   - Each manual page has a short description available within it. This tool searches the descriptions for instances of a given keyword.
     - e.g. `apropos sudo`
 - Useful resource to get help if we have issues to understand a long command is:
-  - [https://explainshell.com/](explainshell)
+  - [explainshell](https://explainshell.com/)
 
 ## Shell
 
@@ -184,7 +213,241 @@ These are very basic notes. They've have been copied & pasted from HackTheBox's 
   - Peripheral Component Interconnect (PCI) is a local computer bus for attaching hardware devices in a computer 
   - PCI is often used to attach hardwares like sound cards, video cards and modem with the motherboard. By this logic, a PCI device means any device that can connect into the motherboard by utilizing the PCI slot
 
+## Navigation
+
+- `pwd`, `ls`, `ls -l`, `ls -l /var/`, `cd /dev/shm`
+- `cd -`
+  - Jump back to the directory we were last in.
+- The shell also offers us the auto-complete function.
+  - If we now type `cd /dev/s` and then press [TAB] twice, we will get all entries starting with the letter "s" in the directory of /dev/.
+- `ls -al` output:
+  - The first entry with a single dot (.) indicates the current directory we are currently in. The second entry with two dots (..) represents the parent directory. This means that we can jump to the parent directory with the following command: `cd ..`
+- Since our shell is filled with some records, we can clean the shell with the command `clear`.
+
+## Working with Files and Directories  
+
+- We can use `touch` to create an empty file and `mkdir` to create a directory.
+  - The command `mkdir` has an option marked `-p` to add parent directories.
+- `tree .`
+  - We can look at the whole structure after creating the parent directories with the tool tree.
+- `touch ./Storage/local/user/userinfo.txt`
+- `mv <file/directory> <renamed file/directory>`
+  - With the command `mv`, we can move and also rename files and directories. 
+- `cp Storage/readme.txt Storage/local/`
+
+## Editing Files
+
+- Text editors - `vi`, `vim`, `nano`, etc. Nano is supposedly a bit easier to understand.
+- nano
+  - `nano notes.txt`
+  -  GNU nano 2.9.3                                    notes.txt                                              
+     Here we can type everything we want and make our notes.▓
+
+     ^G Get Help    ^O Write Out   ^W Where Is    ^K Cut Text    ^J Justify     ^C Cur Pos     M-U Undo
+     ^X Exit        ^R Read File   ^\ Replace     ^U Uncut Text  ^T To Spell    ^_ Go To Line  M-E Redo
+  - The caret (^) stands for our "[CTRL]" key.
+  - Now we can save the file by pressing [CTRL + O] and confirm the file name with [ENTER].
+  - After we have saved the file, we can leave the editor with [CTRL + X].
+- `cat notes.txt`
+  
+- `vim`
+  -  Vim offers a total of six fundamental modes that make our work easier and make this editor so powerful:
+  -  Normal	
+     -  In normal mode, all inputs are considered as editor commands. So there is no insertion of the entered characters into the editor buffer, as is the case with most other editors. After starting the editor, we are usually in the normal mode.
+  - Insert	
+    - With a few exceptions, all entered characters are inserted into the buffer.
+  - Visual	
+    - The visual mode is used to mark a contiguous part of the text, which will be visually highlighted. By positioning the cursor, we change the selected area. The highlighted area can then be edited in various ways, such as deleting, copying, or replacing it.
+  - Command	
+    - It allows us to enter single-line commands at the bottom of the editor. This can be used for sorting, replacing text sections, or deleting them, for example.
+  - Replace	
+    - In replace mode, the newly entered text will overwrite existing text characters unless there are no more old characters at the current cursor position. Then the newly entered text will be added.
+  - When we have the Vim editor open, we can go into command mode by typing ":" and then typing "q" to close Vim.
+  - Vim offers an excellent opportunity called `vimtutor` to practice and get familiar with the editor.
+    - Play with the vimtutor. Get familiar with the editor and experiment with their features.
+
+## Find Files and Directories
+
+- `which`
+  - This tool returns the path to the file or link that should be executed. This allows us to determine if specific programs, like cURL, netcat, wget, python, gcc, are available on the operating system.
+- `find <location> <options>`
+  - Besides the function to find files and folders, this tool also contains the function to filter the results. We can use filter parameters like the size of the file or the date. We can also specify if we only search for files or folders.
+  - e.g. `find / -type f -name *.conf -user root -size +20k -newermt 2020-03-03 -exec ls -al {} \; 2>/dev/null`
+    - `-type f`
+      - 	Hereby, we define the type of the searched object. In this case, 'f' stands for 'file'.
+    - `-name *.conf`
+      - With '-name', we indicate the name of the file we are looking for. The asterisk (*) stands for 'all' files with the '.conf' extension.
+    - `-user root`	
+      - This option filters all files whose owner is the root user.
+    - `-size +20k`	
+      - We can then filter all the located files and specify that we only want to see the files that are larger than 20 KiB.
+    - `-newermt 2020-03-03`
+      - 	With this option, we set the date. Only files newer than the specified date will be presented.
+    - `-exec ls -al {} \;`	
+      - This option executes the specified command, using the curly brackets as placeholders for each result. The backslash escapes the next character from being interpreted by the shell because otherwise, the semicolon would terminate the command and not reach the redirection.
+    - `2>/dev/null`	
+      - This is a STDERR redirection to the 'null device', which we will come back to in the next section. This redirection ensures that no errors are displayed in the terminal. This redirection must not be an option of the 'find' command.
+- `locate *.conf`
+  - This searches for all files with the ".conf" extension, you will find that this search produces results much faster than using find.
+  - The command `locate` offers us a quicker way to search through the system. In contrast to the find command, locate works with a local database that contains all information about existing files and folders. We can update this database with the following command.
+    - `sudo updatedb`
+    - 
+- `wc -l`
+  - Counts the number of lines in input.
+  - wc = word count
+
+## File Descriptors and Redirections
+
+- A **file descriptor** (FD) in Unix/Linux operating systems is an indicator of connection maintained by the kernel to perform Input/Output (I/O) operations. 
+  - In Windows-based operating systems, it is called filehandle. 
+  - It is the connection (generally to a file) from the Operating system to perform I/O operations (Input/Output of Bytes). By default, the first three file descriptors in Linux are:
+    - Data Stream for Input:
+      - STDIN – 0 
+    - Data Stream for Output:
+      - STDOUT – 1
+    - Data Stream for Output that relates to an error occurring.
+      - STDERR – 2
+- `2>/dev/null`
+  - Here, we redirect the file descriptor for the errors (FD 2 - STDERR) to "/dev/null." This way, we redirect the resulting errors to the "null device," which discards all data.
+- `find /etc/ -name shadow 2>/dev/null > results.txt`
+  - Here, the standard output (STDOUT), has been redirected to a file with the name results.txt that will only contain standard output without the standard errors.
+  - We didn't use a number before the greater-than sign (>) in this example. That is because we redirected all the standard errors to the "null device" before, and so the only output we have left is the standard output (FD 1 - STDOUT).
+- `find /etc/ -name shadow 2> stderr.txt 1> stdout.txt`
+  - To make this more precise, we will redirect standard error (FD 2 - STDERR) and standard output (FD 1 - STDOUT) to different files.
+- `cat < stdout.txt`
+  - Redirecting STDIN
+  - The lower-than "<" sign serves as standard input (FD 0 - STDIN). These characters can be seen as "direction" in the form of an arrow that tells us "from where" and "where to" the data should be redirected. We use the cat command to use the contents of the file "stdout.txt" as STDIN.
+- `find /etc/ -name passwd >> stdout.txt 2>/dev/null`
+  - Redirecting STDOUT and Append to a File
+  - When we use the greater-than sign (>) to redirect our STDOUT, a new file is automatically created if it does not already exist. If this file exists, it will be overwritten without asking for confirmation. If we want to append STDOUT to our existing file, we can use the double greater-than sign (>>).
+- `cat << EOF > stream.txt`
+  - Redirecting STDIN Stream to a File
+  - We can also use the double lower-than characters (<<) to add our standard input through a stream. We can use the so-called End-Of-File (EOF) function of a Linux system file, which defines the input's end. In the next example, we will use the cat command to read our streaming input through the stream and direct it to a file called "stream.txt."
+- ` find /etc/ -name *.conf 2>/dev/null | grep systemd | wc -l`
+  - Another way to redirect STDOUT is to use pipes (|). These are useful when we want to use the STDOUT from one program to be processed by another. One of the most commonly used tools is grep, which we will use in the next example. Grep is used to filter STDOUT according to the pattern we define. In the next example, we use the find command to search for all files in the "/etc/" directory with a ".conf" extension. Any errors are redirected to the "null device" (/dev/null). Using grep, we filter out the results and specify that only the lines containing the pattern "systemd" should be displayed.
+
+## Filter Contents
+
+- A pager allow us to scroll through the file in an interactive view.
+- `more /etc/passwd`
+  - After we read the content using cat and redirected it to more, the already mentioned pager opens, and we will automatically start at the beginning of the file.
+  - With the [Q] key, we can leave this pager. We will notice that the output remains in the terminal.
+- `less /etc/passwd`
+  - Notice on the man page that `less` contains many more features than more.
+  - When closing less with the [Q] key, we will notice that the output we have seen, unlike more, does not remain in the terminal.
+- `head /etc/passwd`
+  - By default, head prints the first ten lines of the given file or input, if not specified otherwise.
+- `tail /etc/passwd`
+  - Returns the last ten lines.
+- `cat /etc/passwd | sort` 
+  - By default sorts it alphabetically
+- `cat /etc/passwd | grep "/bin/bash"`
+- `cat /etc/passwd | grep -v "false\|nologin"`
+  - Option "-v" is used with grep to exclude specific results.
+- `cat /etc/passwd | grep -v "false\|nologin" | cut -d":" -f1`
+  - Specific results with different characters may be separated as delimiters. Here it is handy to know how to remove specific delimiters and show the words on a line in a specified position. One of the tools that can be used for this is cut. Therefore we use the option "-d" and set the delimiter to the colon character (:) and define with the option "-f" the position in the line we want to output.
+- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " "`
+  - Another possibility to replace certain characters from a line with characters defined by us is the tool tr. As the first option, we define which character we want to replace, and as a second option, we define the character we want to replace it with. In the next example, we replace the colon character with space.
+- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | column -t`
+  - Since such results can often have an unclear representation, the tool column is well suited to display such results in tabular form using the "-t."
+- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}'`
+  - As we may have noticed, the user "postgres" has one row too many. To keep it as simple as possible to sort out such results, the (g)awk programming is beneficial, which allows us to display the first ($1) and last ($NF) result of the line.
+- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}' | sed 's/bin/HTB/g'`
+  - There will come moments when we want to change specific names in the whole file or standard input. One of the tools we can use for this is the stream editor called sed. One of the most common uses of this is substituting text. Here, sed looks for patterns we have defined in the form of regular expressions (regex) and replaces them with another pattern that we have also defined. Let us stick to the last results and say we want to replace the word "bin" with "HTB."
+
+  The "s" flag at the beginning stands for the substitute command. Then we specify the pattern we want to replace. After the slash (/), we enter the pattern we want to use as a replacement in the third position. Finally, we use the "g" flag, which stands for replacing all matches.
+- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}' | wc -l`
+  - Last but not least, it will often be useful to know how many successful matches we have. To avoid counting the lines or characters manually, we can use the tool wc. With the "-l" option, we specify that only the lines are counted.
+
+## Regular Expressions
+
+- A regular expression is a sequence of letters and symbols that form a search pattern.
+  - They can be used to find and replace text, analyze data, validate input, perform searches, and more. In simple terms, they are a filter criterion that can be used to analyze and manipulate strings.
+- In addition, regular expressions can be created with patterns called metacharacters. Meta characters are symbols that define the search pattern but have no literal meaning.
+
+- Grouping
+| Operators | Description |
+| ----------- | ----------- |
+|    `(a)`    | The round brackets are used to group parts of a regex. Within the brackets, you can define further patterns which should be processed together. |
+|   `[a-z]`   | The square brackets are used to define character classes. Inside the brackets, you can specify a list of characters to search for. |
+|   `{1,10}`  | 	The curly brackets are used to define quantifiers. Inside the brackets, you can specify a number or a range that indicates how often a previous pattern should be repeated. |
+|     `|`     | Also called the OR operator and shows results when one of the two expressions matches|
+|     `.*`    | Also called the AND operator and displayed results only if both expressions match |
+
+
+- To use , `|` and `.*`, you need to apply the extended regex using the -E option in grep.
+
+- `grep -E "(my|false)" /etc/passwd`
+  - Search for lines containing the word *my* or *false*. 
+- `grep -E "(my.*false)" /etc/passwd`
+  - Search for a line where both *my* and *false* are present.
+  - This is equivalent to `grep -E "my" /etc/passwd | grep -E "false"`
+
+### Regex in Detail
+
+- [20 Small Steps to Become a Regex Master](https://dev.to/awwsmm/20-small-steps-to-become-a-regex-master-mpc)
+- [Regular Expressions Cheat Sheet](https://cheatography.com/davechild/cheat-sheets/regular-expressions/)
+
+- Any word which contains an 'o'
+  - `\w*o\w*`
+- Once we find a pattern in some text, what do we do with it? Well, modern regex engines allow you to extract those substrings from the contained text, or remove them, or replace them with other text. Regular expressions are used for text parsing and manipulation.
+
+- Open-and-close square brackets tell the regex engine to match any one of the characters specified, but only one.
+  - pattern: ca[rt]
+    string:  The cat was cut when it ran under the cart.
+    matches:     ^^^                               ^^^
+  
+- Backslash character `\` escapes special characters
+  - Only special characters should be preceded by \ to force a literal match. All other characters are interpreted literally by default. For instance, the regular expression t matches only literal lowercase letter t characters
+  - pattern: \[\]
+    string:  You can't match [] using regex! You will regret this!
+    matches:                 ^^
+  - pattern: \\\[\\\]
+    string:  ...match this regex `\[\]` with a regex?
+    matches:                      ^^^^ 
+  - Other common escape sequences include \n (UNIX-style line breaks) and \r (used in Windows-style line breaks, \r\n). \r is the "carriage return" character and \n is the "line feed" character, both of which were defined along with the ASCII standard when teletypes were still in common usage.
+    - A CR immediately followed by a LF (CRLF, \r\n, or 0x0D0A) moves the cursor down to the next line and then to the beginning of the line.
+
+- There's another special character which is used to match (nearly) any character, and that's the period / full stop character ..
+  - pattern: .
+    string:  I'm sorry, Dave. I'm afraid I can't do that.
+    matches: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  - If you want to match only patterns that look like escape sequences, you could do something like:
+    - pattern: \\.
+      string:  Hi Walmart is my grandson there his name is "\n \r \t".
+      matches:                                              ^^ ^^ ^^
+    
+- Characters are "whitespace" if they don't create any visible mark within text. A space character ' ' is whitespace, as is a line break, or a tab.
+
+- Character classes and ranges allow us to match certain types of characters - e.g. letters, digits, or just vowels.
+  - pattern: \\[a-z]
+    string:  `\n`, `\r`, `\t`, and `\f` are whitespace characters, `\.`, `\\` and `\[` are not.
+    matches:  ^^    ^^    ^^        ^^
+  - pattern: \\[a-gq-z]
+    string:  `\n`, `\r`, `\t`, and `\f` are whitespace characters, `\.`, `\\` and `\[` are not.
+    matches:        ^^    ^^        ^^
+  - Other common character ranges include: `A-Z` and `0-9`.
+  
+- The "not" carat `^` allows us to specify characters and character ranges which the regex engine should not match on.
+  - The carat `^` as the leftmost character inside the square brackets [] tells the regex engine to match one single character which is not within the square brackets.
+  - pattern: [^aeiou]
+    string:  The walls in the mall are totally, totally tall.
+    matches: ^^ ^^ ^^^^ ^^^^ ^^ ^^^ ^ ^^ ^ ^^^^^^ ^ ^^^^^ ^^^
+  - pattern: [a-z][a-z][^y ]
+    string:  day dog hog hay bog bay ray rub
+    matches:     ^^^ ^^^     ^^^         ^^^
+  - Be careful with the "not" carat `^`. It's easy to think, "well, I said `[^b-f]`", so I should get a lowercase letter a, or something after f. That's not the case. That regex will match any character not within that range, including digits, symbols, and whitespace.
+  
+  - Character classes work very similarly to ranges, but you can't specify the "start" and "end" values:
+| Class       | Characters |
+| ----------- | ----------- |
+|    `\d`     | "digits" `[0-9]` |
+|    `\w`     | "word characters" `[A-Za-z0-9_]` |
+|    `\s`     | "whitespace" `[ \t\r\n\f]` |
+
+
 ## User Management
+
 - `sudo`	
   - Execute command as a different user.
 - `su`	
@@ -329,8 +592,7 @@ These are very basic notes. They've have been copied & pasted from HackTheBox's 
   - However, it looks different if we use the double AND characters (`&&`) to run the commands one after the other. If there is an error in one of the commands, the following ones will not be executed anymore, and the whole process will be stopped.
   - Pipes (`|`) depend not only on the correct and error-free operation of the previous processes but also on the previous processes' results. We will deal with the pipes later in the File Descriptors and Redirections section.
 
-## Working with Web Services$$
-
+## Working with Web Services
 
 - Popular web servers include IIS, Nginx and Apache.
 - For an Apache web server, we can use appropriate modules, which can encrypt the communication between browser and web server (mod_ssl), use as a proxy server (mod_proxy), or perform complex manipulations of HTTP header data (mod_headers) and URLs (mod_rewrite).
@@ -342,7 +604,7 @@ These are very basic notes. They've have been copied & pasted from HackTheBox's 
 - After starting the web server, can access it via http://localhost - you should see a Apache2 Ubuntu Default Page.
 - `curl http://localhost`
   - Used to transfer files over multiple protocols hTTP, HTTPS, FTP, SFTP, FTPS, and SCP.
-  - his tool gives us the possibility to control and test websites remotely. Besides the remote servers' content, we can also view individual requests to look at the client's and server's communication.
+  - This tool gives us the possibility to control and test websites remotely. Besides the remote servers' content, we can also view individual requests to look at the client's and server's communication.
 - `wget http://localhost` 
   - ith this tool, we can download files from FTP or HTTP servers directly from the terminal and serves as a good download manager. 
   - The difference to curl is that the website content is downloaded and stored locally.
@@ -355,152 +617,15 @@ These are very basic notes. They've have been copied & pasted from HackTheBox's 
   - Starting the Python 3 web server in this directory makes the readme file accessably via the web server.
 - [Big list of http static server one-liners](https://gist.github.com/willurd/5720255)
 
-## Navigation
+## Exercises
 
-- `pwd`, `ls`, `ls -l`, `ls -l /var/`, `cd /dev/shm`
-- `cd -`
-  - Jump back to the directory we were last in.
-- The shell also offers us the auto-complete function.
-  - If we now type `cd /dev/s` and then press [TAB] twice, we will get all entries starting with the letter "s" in the directory of /dev/.
-- `ls -al` output:
-  - The first entry with a single dot (.) indicates the current directory we are currently in. The second entry with two dots (..) represents the parent directory. This means that we can jump to the parent directory with the following command: `cd ..`
-- Since our shell is filled with some records, we can clean the shell with the command `clear`.
-- 
-
-## Working with Files and Directories  
-
-- We can use `touch` to create an empty file and `mkdir` to create a directory.
-  - The command `mkdir` has an option marked `-p` to add parent directories.
-- `tree .`
-  - We can look at the whole structure after creating the parent directories with the tool tree.
-- `touch ./Storage/local/user/userinfo.txt`
-- `mv <file/directory> <renamed file/directory>`
-  - With the command `mv`, we can move and also rename files and directories. 
-- `cp Storage/readme.txt Storage/local/`
-
-## Editing Files
-
-- Text editors - `vi`, `vim`, `nano`, etc. Nano is supposedly a bit easier to understand.
-- nano
-  - `nano notes.txt`
-  -  GNU nano 2.9.3                                    notes.txt                                              
-     Here we can type everything we want and make our notes.▓
-
-     ^G Get Help    ^O Write Out   ^W Where Is    ^K Cut Text    ^J Justify     ^C Cur Pos     M-U Undo
-     ^X Exit        ^R Read File   ^\ Replace     ^U Uncut Text  ^T To Spell    ^_ Go To Line  M-E Redo
-  - The caret (^) stands for our "[CTRL]" key.
-  - Now we can save the file by pressing [CTRL + O] and confirm the file name with [ENTER].
-  - After we have saved the file, we can leave the editor with [CTRL + X].
-- `cat notes.txt`
-  
-- `vim`
-  -  Vim offers a total of six fundamental modes that make our work easier and make this editor so powerful:
-  -  Normal	
-     -  In normal mode, all inputs are considered as editor commands. So there is no insertion of the entered characters into the editor buffer, as is the case with most other editors. After starting the editor, we are usually in the normal mode.
-  - Insert	
-    - With a few exceptions, all entered characters are inserted into the buffer.
-  - Visual	
-    - The visual mode is used to mark a contiguous part of the text, which will be visually highlighted. By positioning the cursor, we change the selected area. The highlighted area can then be edited in various ways, such as deleting, copying, or replacing it.
-  - Command	
-    - It allows us to enter single-line commands at the bottom of the editor. This can be used for sorting, replacing text sections, or deleting them, for example.
-  - Replace	
-    - In replace mode, the newly entered text will overwrite existing text characters unless there are no more old characters at the current cursor position. Then the newly entered text will be added.
-  - When we have the Vim editor open, we can go into command mode by typing ":" and then typing "q" to close Vim.
-  - Vim offers an excellent opportunity called `vimtutor` to practice and get familiar with the editor.
-    - Play with the vimtutor. Get familiar with the editor and experiment with their features.
-
-## Find Files and Directories
-
-- `which`
-  - This tool returns the path to the file or link that should be executed. This allows us to determine if specific programs, like cURL, netcat, wget, python, gcc, are available on the operating system.
-- `find <location> <options>`
-  - Besides the function to find files and folders, this tool also contains the function to filter the results. We can use filter parameters like the size of the file or the date. We can also specify if we only search for files or folders.
-  - e.g. `find / -type f -name *.conf -user root -size +20k -newermt 2020-03-03 -exec ls -al {} \; 2>/dev/null`
-    - `-type f`
-      - 	Hereby, we define the type of the searched object. In this case, 'f' stands for 'file'.
-    - `-name *.conf`
-      - With '-name', we indicate the name of the file we are looking for. The asterisk (*) stands for 'all' files with the '.conf' extension.
-    - `-user root`	
-      - This option filters all files whose owner is the root user.
-    - `-size +20k`	
-      - We can then filter all the located files and specify that we only want to see the files that are larger than 20 KiB.
-    - `-newermt 2020-03-03`
-      - 	With this option, we set the date. Only files newer than the specified date will be presented.
-    - `-exec ls -al {} \;`	
-      - This option executes the specified command, using the curly brackets as placeholders for each result. The backslash escapes the next character from being interpreted by the shell because otherwise, the semicolon would terminate the command and not reach the redirection.
-    - `2>/dev/null`	
-      - This is a STDERR redirection to the 'null device', which we will come back to in the next section. This redirection ensures that no errors are displayed in the terminal. This redirection must not be an option of the 'find' command.
-- `locate *.conf`
-  - This searches for all files with the ".conf" extension, you will find that this search produces results much faster than using find.
-  - The command `locate` offers us a quicker way to search through the system. In contrast to the find command, locate works with a local database that contains all information about existing files and folders. We can update this database with the following command.
-    - `sudo updatedb`
-    - 
-- `wc -l`
-  - Counts the number of lines in input.
-  - wc = word count
-
-## File Descriptors and Redirections
-
-- A **file descriptor** (FD) in Unix/Linux operating systems is an indicator of connection maintained by the kernel to perform Input/Output (I/O) operations. 
-  - In Windows-based operating systems, it is called filehandle. 
-  - It is the connection (generally to a file) from the Operating system to perform I/O operations (Input/Output of Bytes). By default, the first three file descriptors in Linux are:
-    - Data Stream for Input:
-      - STDIN – 0 
-    - Data Stream for Output:
-      - STDOUT – 1
-    - Data Stream for Output that relates to an error occurring.
-      - STDERR – 2
-- `2>/dev/null`
-  - Here, we redirect the file descriptor for the errors (FD 2 - STDERR) to "/dev/null." This way, we redirect the resulting errors to the "null device," which discards all data.
-- `find /etc/ -name shadow 2>/dev/null > results.txt`
-  - Here, the standard output (STDOUT), has been redirected to a file with the name results.txt that will only contain standard output without the standard errors.
-  - We didn't use a number before the greater-than sign (>) in this example. That is because we redirected all the standard errors to the "null device" before, and so the only output we have left is the standard output (FD 1 - STDOUT).
-- `find /etc/ -name shadow 2> stderr.txt 1> stdout.txt`
-  - To make this more precise, we will redirect standard error (FD 2 - STDERR) and standard output (FD 1 - STDOUT) to different files.
-- `cat < stdout.txt`
-  - Redirecting STDIN
-  - The lower-than "<" sign serves as standard input (FD 0 - STDIN). These characters can be seen as "direction" in the form of an arrow that tells us "from where" and "where to" the data should be redirected. We use the cat command to use the contents of the file "stdout.txt" as STDIN.
-- `find /etc/ -name passwd >> stdout.txt 2>/dev/null`
-  - Redirecting STDOUT and Append to a File
-  - When we use the greater-than sign (>) to redirect our STDOUT, a new file is automatically created if it does not already exist. If this file exists, it will be overwritten without asking for confirmation. If we want to append STDOUT to our existing file, we can use the double greater-than sign (>>).
-- `cat << EOF > stream.txt`
-  - Redirecting STDIN Stream to a File
-  - We can also use the double lower-than characters (<<) to add our standard input through a stream. We can use the so-called End-Of-File (EOF) function of a Linux system file, which defines the input's end. In the next example, we will use the cat command to read our streaming input through the stream and direct it to a file called "stream.txt."
-- ` find /etc/ -name *.conf 2>/dev/null | grep systemd | wc -l`
-  - Another way to redirect STDOUT is to use pipes (|). These are useful when we want to use the STDOUT from one program to be processed by another. One of the most commonly used tools is grep, which we will use in the next example. Grep is used to filter STDOUT according to the pattern we define. In the next example, we use the find command to search for all files in the "/etc/" directory with a ".conf" extension. Any errors are redirected to the "null device" (/dev/null). Using grep, we filter out the results and specify that only the lines containing the pattern "systemd" should be displayed.
-
-## Filter Contents
-- A pager allow us to scroll through the file in an interactive view.
-- `more /etc/passwd`
-  - After we read the content using cat and redirected it to more, the already mentioned pager opens, and we will automatically start at the beginning of the file.
-  - With the [Q] key, we can leave this pager. We will notice that the output remains in the terminal.
-- `less /etc/passwd`
-  - Notice on the man page that `less` contains many more features than more.
-  - When closing less with the [Q] key, we will notice that the output we have seen, unlike more, does not remain in the terminal.
-- `head /etc/passwd`
-  - By default, head prints the first ten lines of the given file or input, if not specified otherwise.
-- `tail /etc/passwd`
-  - Returns the last ten lines.
-- `cat /etc/passwd | sort` 
-  - By default sorts it alphabetically
-- `cat /etc/passwd | grep "/bin/bash"`
-- `cat /etc/passwd | grep -v "false\|nologin" | cut -d":" -f1`
-  - Specific results with different characters may be separated as delimiters. Here it is handy to know how to remove specific delimiters and show the words on a line in a specified position. One of the tools that can be used for this is cut. Therefore we use the option "-d" and set the delimiter to the colon character (:) and define with the option "-f" the position in the line we want to output.
-- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " "`
-  - Another possibility to replace certain characters from a line with characters defined by us is the tool tr. As the first option, we define which character we want to replace, and as a second option, we define the character we want to replace it with. In the next example, we replace the colon character with space.
-- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | column -t`
-  - Since such results can often have an unclear representation, the tool column is well suited to display such results in tabular form using the "-t."
-- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}'`
-  - As we may have noticed, the user "postgres" has one row too many. To keep it as simple as possible to sort out such results, the (g)awk programming is beneficial, which allows us to display the first ($1) and last ($NF) result of the line.
-- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}' | sed 's/bin/HTB/g'`
-  - There will come moments when we want to change specific names in the whole file or standard input. One of the tools we can use for this is the stream editor called sed. One of the most common uses of this is substituting text. Here, sed looks for patterns we have defined in the form of regular expressions (regex) and replaces them with another pattern that we have also defined. Let us stick to the last results and say we want to replace the word "bin" with "HTB."
-
-  The "s" flag at the beginning stands for the substitute command. Then we specify the pattern we want to replace. After the slash (/), we enter the pattern we want to use as a replacement in the third position. Finally, we use the "g" flag, which stands for replacing all matches.
-- `cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}' | wc -l`
-  - Last but not least, it will often be useful to know how many successful matches we have. To avoid counting the lines or characters manually, we can use the tool wc. With the "-l" option, we specify that only the lines are counted.
-
-
-
+- How many services are listening on the target system on all interfaces? (Not on localhost and IPv4 only)
+  - `netstat -l4 |  grep LISTEN | grep -v "127\.0\.0\|localhost" | wc -l`
+  - `ss -l4 |  grep LISTEN | grep -v "127\.0\.0\|localhost" | wc -l`
+- Determine what user the ProFTPd server is running under.
+  - `ps -aux | grep -i ProFTPd`
+-  Use cURL from your Pwnbox (not the target machine) to obtain the source code of the "https://www.inlanefreight.com" website and filter all unique paths of that domain. Submit the number of these paths as the answer.
+   -  `curl https://www.inlanefreight.com | tr " " "\n" | cut -d"'" -f2 | cut -d"\"" -f2 | grep https://www.inlanefreight.com | sort -u | wc -l`
 ## Other
 
 - Maximum transmission unit (MTU) is a measurement representing the largest data packet that a network-connected device will accept.
