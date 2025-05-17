@@ -34,6 +34,7 @@
   - [Firewall Setup](#firewall-setup)
   - [System Logs](#system-logs)
   - [Solaris](#solaris)
+  - [Shortcuts](#shortcuts)
   - [Exercises](#exercises)
   - [Other](#other)
 
@@ -2594,6 +2595,83 @@ truss ls
 
 ---
 ```
+
+## Shortcuts
+
+Using shortcuts in Linux can make tasks quicker and more efficient by reducing reliance on the mouse and minimizing typing. Mastering these shortcuts enhances productivity, especially when navigating the terminal or working in complex environments.
+
+---
+
+### Auto-Complete
+
+- **`[TAB]`** – Auto-completes commands, filenames, or directories based on the `STDIN` provided.
+
+---
+
+### Cursor Movement
+
+- **`[CTRL] + A`** – Move to the **beginning** of the current line.
+- **`[CTRL] + E`** – Move to the **end** of the current line.
+- **`[CTRL] + ← / →`** – Jump to the beginning/previous word.
+- **`[ALT] + B / F`** – Jump **backward** or **forward** one word.
+
+---
+
+### Erase the Current Line
+
+- **`[CTRL] + U`** – Erase from the cursor to the **beginning** of the line.
+- **`[CTRL] + K`** – Erase from the cursor to the **end** of the line.
+- **`[CTRL] + W`** – Erase the word before the cursor.
+
+---
+
+### Paste Erased Contents
+
+- **`[CTRL] + Y`** – Paste the last erased word or line.
+
+---
+
+### Ends Task
+
+- **`[CTRL] + C`** – Sends a `SIGINT` signal to stop the current task or process immediately.
+
+---
+
+### End-of-File (EOF)
+
+- **`[CTRL] + D`** – Closes the `STDIN` stream, signaling an EOF (End-of-Transmission).
+
+---
+
+### Clear Terminal
+
+- **`[CTRL] + L`** – Clears the terminal screen (same as typing `clear`).
+
+---
+
+### Background a Process
+
+- **`[CTRL] + Z`** – Suspends the current process by sending a `SIGTSTP` signal.
+
+---
+
+### Search Through Command History
+
+- **`[CTRL] + R`** – Search command history in reverse for matches.
+- **`[↑] / [↓]`** – Navigate through previous and next commands in history.
+
+---
+
+### Switch Between Applications
+
+- **`[ALT] + [TAB]`** – Switch between open applications.
+
+---
+
+### Zoom
+
+- **`[CTRL] + [+]`** – Zoom in.
+- **`[CTRL] + [-]`** – Zoom out.
 
 ## Exercises
 
